@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./index.css" />
+    <script src="./script.js"></script>
+    <title>Chattin away..</title>
+  </head>
+  <body>
+    <!-- This is a basic mockup of how a secure fullstack chat might look. You may use this code to get started with the frontend. -->
+    <header class="darker">ChatApp</header>
+    <main class="dark">
+      <div class="left">
+        <div class="heading">Channels</div>
+        <div class="channelContainer"></div>
+        <!-- <div class="selected"></div>
+        <div>🔓 work</div>
+        <div>random</div> -->
+
+        <div class="separator"></div>
+
+        <div class="auth">
+          Welcome, guest
+          <input class="login" type="text" placeholder="Username" />
+          <input class="password" type="password" placeholder="Password" />
+          <button class="signIn">Login</button>
+          <button class="signUp">Sign up</button>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="right-heading">Messages</div>
+        <div class="messageContainer framed"></div>
+
+        <div class="message-form">
+          <input class="messageInput" type="text" placeholder="Write here..." />
+          <button class="messageSend button">Send</button>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>
+<template id="channelTemplate">
+  <div class="tasks">
+    <div class="content">
+      <button class="wrapButton">
+        <span class="status">Locked - </span>
+        <span class="channelName"></span>
+      </button>
+    </div>
+  </div>
+</template>
+<template id="messageTemplate">
+  <div class="tasks">
+    <div class="content">
+      <div class="timeStamp">:</div>
+      <span class="username">: </span>
+      <span class="message">: </span>
+    </div>
+    <!-- <div class="actions">
+      <button class="edit">Edit</button>
+      <button class="delete">Delete</button>
+    </div> -->
+  </div>
+</template>

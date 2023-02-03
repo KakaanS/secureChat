@@ -1,0 +1,71 @@
+[
+  {
+    "channelID": 1,
+    "channelName": "Public",
+    "status": "Public",
+    "chat": [
+      {
+        "messageid": 28,
+        "uuid": 17,
+        "message": "Test!",
+        "timestamp": "2023-02-03 21:06:31"
+      },
+      {
+        "messageid": 32,
+        "uuid": 17,
+        "message": "asd",
+        "timestamp": "2023-02-03 21:14:30"
+      },
+      {
+        "messageid": 33,
+        "uuid": 17,
+        "message": "t",
+        "timestamp": "2023-02-03 21:23:22"
+      },
+      {
+        "messageid": 34,
+        "uuid": 17,
+        "message": "Få JWT Att hålla sig",
+        "timestamp": "2023-02-03 21:40:54"
+      }
+    ]
+  },
+  {
+    "channelID": 3,
+    "channelName": "Private",
+    "status": "Private",
+    "chat": [
+      {
+        "messageid": 31,
+        "uuid": 17,
+        "message": "asd",
+        "timestamp": "2023-02-03 21:14:28"
+      }
+    ]
+  },
+  {
+    "channelID": 2,
+    "channelName": "My Channel",
+    "status": "private",
+    "chat": [
+      {
+        "messageid": 25,
+        "uuid": 17,
+        "message": "Test, tömma igen! ",
+        "timestamp": "2023-02-03 20:34:51"
+      },
+      {
+        "messageid": 29,
+        "uuid": 17,
+        "message": "!",
+        "timestamp": "2023-02-03 21:08:27"
+      },
+      {
+        "messageid": 30,
+        "uuid": 17,
+        "message": "asd",
+        "timestamp": "2023-02-03 21:14:26"
+      }
+    ]
+  }
+]
