@@ -108,6 +108,26 @@ router.get("/channels", async (req, res) => {
   res.send(db_channel.data);
 });
 
+router.post("/verifyToken", async (req, res) => {
+  await db_users.read();
+  let token =
+    req.body.token || req.query.token || req.headers["x-access-token"];
+  if (!token) {
+    let x = req.headers.cookie;
+    if (x === undefined) {
+      res.sendStatus(401);
+      return;
+    }
+    token = x.substring(7);
+  }
+  let decoded = decode(token);
+  if (decoded === false) {
+    res.sendStatus(401);
+    return;
+  }
+  res.status(200).send(decoded);
+});
+
 router.post("/newUser", (req, res) => {
   const username = req.body.name;
   const password = req.body.password;
@@ -136,48 +156,14 @@ router.post("/login", async (req, res) => {
     return;
   }
   const nameToken = createToken(username);
-  res.cookie("token", nameToken.token, {
+  res.cookie("nameToken", nameToken.token, {
     maxAge: process.env.JWTEXPIRES * 1000,
+    name: username,
     httpOnly: true,
   });
-  /* localStorage.setItem("token", nameToken.token); */
-
   res.status(200).send({ success: true });
   console.log(nameToken);
 });
-
-/* app.get("/secret", (req, res) => {
-    // JWT kan skickas antingen i request body, med querystring, eller i header: Authorization
-    let token = req.body.token || req.query.token;
-    if (!token) {
-      let x = req.headers["authorization"];
-      if (x === undefined) {
-        // Vi hittade ingen token, authorization fail
-        res.sendStatus(401);
-        return;
-      }
-      token = x.substring(7);
-      // Authorization: Bearer JWT......
-      // substring(7) för att hoppa över "Bearer " och plocka ut JWT-strängen
-    } 
-
-  console.log("Token: ", token);
-  if (token) {
-    let decoded;
-    try {
-      decoded = jwt.verify(token, process.env.SECRET);
-    } catch (error) {
-      console.log("Catch! Felaktig token!!");
-      res.sendStatus(401);
-      return;
-    }
-    console.log("decoded: ", decoded);
-    res.send("You have access to the secret stuff.");
-  } else {
-    console.log("Ingen token");
-    res.sendStatus(401); // Unauthorized
-  }
-}); */
 
 router.post("/newMessage", async (req, res) => {
   await updateDataFromAllDB();
@@ -368,6 +354,7 @@ function createToken(name) {
     expiresIn: process.env.JWTEXPIRES,
   });
   user.token = token;
+  console.log("NEW JWT", name);
   return user;
 }
 function generateDate() {
@@ -376,6 +363,23 @@ function generateDate() {
   const time = dateAndTime.slice(11, 19);
   const newDateAndTime = `${date} ${time}`;
   return newDateAndTime;
+}
+
+function decode(token) {
+  if (token) {
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.TOKEN_SECRET);
+    } catch (error) {
+      console.log("ogiltig token", error);
+      return false;
+    }
+    console.log("decoded", decoded);
+    return decoded;
+  } else {
+    console.log("no token");
+    return false;
+  }
 }
 
 export default router;

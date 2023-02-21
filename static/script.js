@@ -17,6 +17,32 @@ const fetchChannelsFromServer = async () => {
   });
 };
 
+/* const createChannel = () => {
+  const newChannelInput = document.querySelector(".newChannel");
+  const privateCheckbox = document.querySelector("#private");
+  const addNewChannelButton = document.querySelector(".addNewChannel");
+
+  addNewChannelButton.addEventListener("click", () => {
+    const channelName = newChannelInput.value;
+    const isPrivate = privateCheckbox.checked;
+
+    fetch("/api/createChannel", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ channelName, isPrivate }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Channel created successfully", data);
+      })
+      .catch((error) => {
+        console.error("Error creating channel", error);
+      });
+  });
+};
+
+createChannel(); */
+
 const fetchUserNameFromUuid = async (uuid) => {
   const response = await fetch(`http://localhost:3000/api/getUUID/${uuid}`);
   const user = await response.json();
@@ -38,24 +64,19 @@ const fetchChannelMessages = async (channelID) => {
 };
 
 const selectChannelHandler = (event) => {
-  console.log("-------------");
   clearMessageContainer();
   const target = event.target;
   const channel_id = target.getAttribute("data-id");
   const channel_status = target.getAttribute("data-status");
   const channelIsPublic = channel_status.toLowerCase() === "true";
 
-  /* const messages = await loadChannelMessages(channel_id); */
-  // Tabort "selected" från alla klasser
   const channelWrapperButtons = document.querySelectorAll(".wrapButton");
   channelWrapperButtons.forEach((button) => {
     button.classList.remove("selected");
   });
 
-  // "Lägg till" selected class till den kanal man markerar
   target.classList.add("selected");
 
-  // Ladda in meddelanden på specifikt kanal-id
   selectedChannel = target.getAttribute("data-id");
   const userIsLoggedIn = currentUser !== null;
   if (userIsLoggedIn) {
@@ -75,7 +96,6 @@ const clearMessageContainer = () => {
 };
 
 async function getUserUUID(username) {
-  console.log("username is getuserUUID:", username);
   const response = await fetch(`/api/getUser/${username}`);
   if (!response.ok) {
     console.error("Error: Could not fetch user data");
@@ -86,7 +106,6 @@ async function getUserUUID(username) {
 }
 
 const postMessage = async () => {
-  //const username = prompt("Enter your username:");
   if (!currentUser) {
     console.error("Error: User is not logged in. Please log in first.");
     return;
@@ -131,7 +150,42 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-// ÅTERKOM TILL DENNA NÄR LOGIN / CREATE USER FUNGERAR.
+async function verifyToken(loadJWWT) {
+  const jwtObject = {
+    token: loadJWWT,
+  };
+  console.log("jwtObject: ", jwtObject);
+  const options = {
+    method: "POST",
+    body: JSON.stringify(jwtObject),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+  const response = await fetch("/api/verifyToken", options);
+  if (response.status === 200) {
+    const username = await response.json();
+    changeTextAndHideInputs(username);
+  }
+}
+
+function changeTextAndHideInputs(currentUser) {
+  const welcomeText = document.querySelector(".welcomeText");
+  console.log(welcomeText);
+
+  welcomeText.innerText = "Welcome, " + currentUser;
+
+  const loginInput = document.querySelector(".login");
+  const passwordInput = document.querySelector(".password");
+  const signIn = document.querySelector(".signIn");
+  const signUp = document.querySelector(".signUp");
+
+  loginInput.style.display = "none";
+  passwordInput.style.display = "none";
+  signIn.style.display = "none";
+  signUp.style.display = "none";
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   async function login() {
     const username = document.querySelector(".login").value;
@@ -151,20 +205,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (response.status === 200) {
       const nameToken = await response.text();
-      //spara ner username i global variabel
       currentUser = username;
-      // Do something with the token, like storing it in local storage
       localStorage.setItem("nameToken", nameToken);
+      changeTextAndHideInputs(username);
     } else if (response.status === 400) {
-      // Show an error message to the user that the input is missing or incorrect
       console.error("Bad request: missing or incorrect input");
     } else if (response.status === 401) {
-      // Show an error message to the user that the password is incorrect
       console.error("Unauthorized: incorrect password");
     }
   }
-
-  // Attach the login function to the button click event
 
   document.querySelector(".signIn").addEventListener("click", login);
 });
@@ -235,5 +284,11 @@ const buildMessageChatViaTemplate = (text, timeStamp, username) => {
 };
 
 window.addEventListener("load", () => {
+  /*  handleStoredName(); */
   fetchChannelsFromServer();
+});
+window.addEventListener("storage", (event) => {
+  if (event.key === "nameToken") {
+    /*  handleStoredName(); */
+  }
 });
