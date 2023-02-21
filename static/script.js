@@ -17,7 +17,7 @@ const fetchChannelsFromServer = async () => {
   });
 };
 
-/* const createChannel = () => {
+const createChannel = () => {
   const newChannelInput = document.querySelector(".newChannel");
   const privateCheckbox = document.querySelector("#private");
   const addNewChannelButton = document.querySelector(".addNewChannel");
@@ -40,8 +40,6 @@ const fetchChannelsFromServer = async () => {
       });
   });
 };
-
-createChannel(); */
 
 const fetchUserNameFromUuid = async (uuid) => {
   const response = await fetch(`http://localhost:3000/api/getUUID/${uuid}`);
@@ -152,7 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 async function verifyToken(loadJWWT) {
   const jwtObject = {
-    token: loadJWWT,
+    nameToken: loadJWWT,
   };
   console.log("jwtObject: ", jwtObject);
   const options = {
@@ -164,8 +162,8 @@ async function verifyToken(loadJWWT) {
   };
   const response = await fetch("/api/verifyToken", options);
   if (response.status === 200) {
-    const username = await response.json();
-    changeTextAndHideInputs(username);
+    const user = await response.json();
+    changeTextAndHideInputs(user.username);
   }
 }
 
@@ -179,11 +177,13 @@ function changeTextAndHideInputs(currentUser) {
   const passwordInput = document.querySelector(".password");
   const signIn = document.querySelector(".signIn");
   const signUp = document.querySelector(".signUp");
+  const logout = document.querySelector(".logout");
 
   loginInput.style.display = "none";
   passwordInput.style.display = "none";
   signIn.style.display = "none";
   signUp.style.display = "none";
+  logout.style.display = "block";
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -283,12 +283,32 @@ const buildMessageChatViaTemplate = (text, timeStamp, username) => {
   messageContainer.appendChild(clone);
 };
 
-window.addEventListener("load", () => {
-  /*  handleStoredName(); */
-  fetchChannelsFromServer();
-});
-window.addEventListener("storage", (event) => {
-  if (event.key === "nameToken") {
-    /*  handleStoredName(); */
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  console.log(value);
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+}
+const logout = async () => {
+  try {
+    const res = await fetch("http://localhost:3000/api/logout", {
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+    var content = await res.json();
+    console.log(content);
+  } catch (err) {
+    console.log(err);
   }
+  location.reload();
+};
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelector(".logout").addEventListener("click", logout);
+});
+
+window.addEventListener("load", () => {
+  const nameToken = getCookie("nameToken");
+  verifyToken(nameToken);
+  fetchChannelsFromServer();
 });

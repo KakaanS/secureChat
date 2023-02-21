@@ -33,6 +33,12 @@
         "uuid": 35,
         "message": "Test! ",
         "timestamp": "2023-02-21 09:43:04"
+      },
+      {
+        "messageid": 39,
+        "uuid": "17",
+        "message": "Hello Simon!",
+        "timestamp": "2023-02-21 10:23:57"
       }
     ]
   },
@@ -91,5 +97,17 @@
         "timestamp": "2023-02-21 08:21:40"
       }
     ]
+  },
+  {
+    "channelID": 4,
+    "channelName": "Franks hundkanal",
+    "status": "public",
+    "chat": []
+  },
+  {
+    "channelID": 5,
+    "channelName": "Franks andra hundkanal",
+    "status": "private",
+    "chat": []
   }
 ]

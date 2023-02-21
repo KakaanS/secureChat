@@ -110,10 +110,10 @@ router.get("/channels", async (req, res) => {
 
 router.post("/verifyToken", async (req, res) => {
   await db_users.read();
-  let token =
-    req.body.token || req.query.token || req.headers["x-access-token"];
+  let token = req.body.nameToken || req.query.nameToken;
+  console.log("token", token);
   if (!token) {
-    let x = req.headers.cookie;
+    let x = req.headers["authorization"];
     if (x === undefined) {
       res.sendStatus(401);
       return;
@@ -150,6 +150,9 @@ router.post("/login", async (req, res) => {
   }
   const nameIndex = nameExist(username);
   console.log("nameindex:", nameIndex);
+  console.log("Lösenord i DB", db_users.data[nameIndex].password);
+  console.log("Lösenord  skickat", hashedPassword);
+
   if (db_users.data[nameIndex].password !== hashedPassword) {
     console.log("Wrong password");
     res.sendStatus(401);
@@ -157,9 +160,8 @@ router.post("/login", async (req, res) => {
   }
   const nameToken = createToken(username);
   res.cookie("nameToken", nameToken.token, {
-    maxAge: process.env.JWTEXPIRES * 1000,
+    maxAge: process.env.JWTEXPIRES * 500000,
     name: username,
-    httpOnly: true,
   });
   res.status(200).send({ success: true });
   console.log(nameToken);
@@ -253,6 +255,11 @@ router.delete("/deleteMessage/:id", async (req, res) => {
   messageToDelete.deleted = true;
   messageToDelete.deletedTimestamp = Date.now();
   await db_channel.write();
+  res.sendStatus(200);
+});
+
+router.get("/logout", (req, res) => {
+  res.clearCookie("nameToken");
   res.sendStatus(200);
 });
 

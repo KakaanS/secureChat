@@ -147,3 +147,6 @@ button {
 .auth input {
   padding-left: 1em;
 }
+.logout {
+  display: none;
+}

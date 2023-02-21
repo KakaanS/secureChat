@@ -98,5 +98,35 @@
     "uuid": 35,
     "username": "5",
     "password": "$2a$10$6t8A9Z4jILgLdf5DrSEjze3r8p7GJGJqyXUteXbdF2pjCBzGxCUFC"
+  },
+  {
+    "uuid": 36,
+    "username": "1",
+    "password": "$2a$10$leNy3pgUEYYxeeg4msATzOTgCTgv/u2jlmuszg8S8oU.07ZPshwA2"
+  },
+  {
+    "uuid": 37,
+    "username": "8",
+    "password": "$2a$10$qeBRjafz/WAamEmeBi7CDO8CGdQ2IhXp2IoM6glrBO/kEce4SJKyG"
+  },
+  {
+    "uuid": 38,
+    "username": "Insomnia test",
+    "password": "$2a$10$PVyqJjHYKCCN5qQVp04NtO65WOj6rqBJpz590jG88zyXcWdinP3XO"
+  },
+  {
+    "uuid": 39,
+    "username": "11",
+    "password": "$2a$10$5YmSl1DaSVbxIAm9miQUKejPKUfo.R8TG1i5S2zxusvcO8rZiLpV."
+  },
+  {
+    "uuid": 40,
+    "username": "12",
+    "password": "$2a$10$2R4WmZikKchEsXkGIzP/R.UnohmKZc6CeO.t5M5lWSXIUk31Jax.m"
+  },
+  {
+    "uuid": 41,
+    "username": "1",
+    "password": "$2a$10$6t8A9Z4jILgLdf5DrSEjzeMYa2ADj63ly8dwgREg/RiBA0zpLVfrO"
   }
 ]
