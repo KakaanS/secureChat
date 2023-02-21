@@ -17,7 +17,7 @@ const fetchChannelsFromServer = async () => {
   });
 };
 
-const createChannel = () => {
+/* const createChannel = () => {
   const newChannelInput = document.querySelector(".newChannel");
   const privateCheckbox = document.querySelector("#private");
   const addNewChannelButton = document.querySelector(".addNewChannel");
@@ -39,7 +39,7 @@ const createChannel = () => {
         console.error("Error creating channel", error);
       });
   });
-};
+}; */
 
 const fetchUserNameFromUuid = async (uuid) => {
   const response = await fetch(`http://localhost:3000/api/getUUID/${uuid}`);
