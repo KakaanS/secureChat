@@ -45,25 +45,16 @@ router.get("/", (req, res) => {
 });
 
 router.get("/getUUID/:id", async (req, res) => {
-  // Read the users from the database (users.json)
-  fs.readFile("./db/users.json", "utf8", (err, users) => {
-    if (err) {
-      return res.status(500).send({ message: "Error reading users from file" });
-    }
+  await db_users.read();
+  const requuid = Number(req.params.id);
+  const user = db_users.data.find((user) => user.uuid === requuid);
+  console.log("user", user);
+  if (!user) {
+    return res.status(404).send({ message: "User not found" });
+  }
+  console.log("user", user);
 
-    // Parse the users string into an object
-    const parsedUsers = JSON.parse(users);
-
-    // Find the user with the matching UUID
-    const user = parsedUsers.find((u) => u.uuid == req.params.id);
-
-    if (!user) {
-      return res.status(404).send({ message: "User not found" });
-    }
-
-    // Return the user object
-    res.send(user);
-  });
+  res.json(user);
 });
 
 router.get("/getUser/:username", async (req, res) => {
