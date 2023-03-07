@@ -15,6 +15,11 @@ const fetchChannelsFromServer = async () => {
   });
 };
 
+const resetChannels = () => {
+  const channelsList = document.querySelector(".channelContainer");
+  channelsList.innerHTML = "";
+};
+
 const addNewChannelButton = document.querySelector("#addNewChannel");
 
 addNewChannelButton.addEventListener("click", () => {
@@ -28,9 +33,9 @@ const createChannel = () => {
   const channelName = newChannelInput.value;
   let status;
   if (privateCheckbox.checked === false) {
-    status = "Public";
+    status = "public";
   } else {
-    status = "Private";
+    status = "private";
   }
 
   fetch("/api/createChannel", {
@@ -38,9 +43,10 @@ const createChannel = () => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ channelName, status }),
   })
-    .then((response) => response.json())
     .then((data) => {
       console.log("Channel created successfully", data);
+      resetChannels();
+      fetchChannelsFromServer();
     })
     .catch((error) => {
       console.error("Error creating channel", error);
@@ -275,7 +281,7 @@ const buildChannelListViaTemplate = (text, isPublic, channelID) => {
   const channel_name = clone.querySelector(".channelName");
   const channel_status = clone.querySelector(".status");
   const channel_wrap_button = clone.querySelector(".wrapButton");
-  /* console.log("is it public eller?", isPublic); */
+
   if (isPublic) {
     channel_status.innerText = "";
   }
@@ -291,7 +297,6 @@ const buildChannelListViaTemplate = (text, isPublic, channelID) => {
 
   channel_wrap_button.addEventListener("click", selectChannelHandler);
   channelContainer.appendChild(clone);
-  /* console.log("channelwrap: ", channel_wrap_button); */
 };
 
 const buildMessageChatViaTemplate = (text, timeStamp, username) => {

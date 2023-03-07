@@ -76,6 +76,12 @@
         "uuid": 17,
         "message": "Test!",
         "timestamp": "2023-03-04 10:22:41"
+      },
+      {
+        "messageid": 49,
+        "uuid": 21,
+        "message": "test",
+        "timestamp": "2023-03-07 11:37:12"
       }
     ]
   },
@@ -143,31 +149,6 @@
         "uuid": 21,
         "message": "Test",
         "timestamp": "2023-03-07 11:01:48"
-      }
-    ]
-  },
-  {
-    "channelID": 4,
-    "channelName": "Franks hundkanal",
-    "status": "Public",
-    "chat": []
-  },
-  {
-    "channelID": 5,
-    "channelName": "Franks andra hundkanal",
-    "status": "Private",
-    "chat": []
-  },
-  {
-    "channelID": 6,
-    "channelName": "The One",
-    "status": "private",
-    "chat": [
-      {
-        "messageid": 48,
-        "uuid": 21,
-        "message": "Test",
-        "timestamp": "2023-03-07 11:07:50"
       }
     ]
   }
