@@ -213,6 +213,20 @@ async function changeTextAndHideInputs(currentUser) {
   logout.style.display = "block";
 }
 
+function showLoginButtons() {
+  const loginInput = document.querySelector(".login");
+  const passwordInput = document.querySelector(".password");
+  const signIn = document.querySelector(".signIn");
+  const signUp = document.querySelector(".signUp");
+  const logout = document.querySelector(".logout");
+
+  loginInput.style.display = "block";
+  passwordInput.style.display = "block";
+  signIn.style.display = "block";
+  signUp.style.display = "block";
+  logout.style.display = "none";
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   async function login() {
     const username = document.querySelector(".login").value;
@@ -316,7 +330,8 @@ const buildMessageChatViaTemplate = (text, timeStamp, username) => {
 const logout = () => {
   localStorage.removeItem("jwt");
   currentUser = null;
-  changeTextAndHideInputs(null);
+  changeTextAndHideInputs("Guest");
+  showLoginButtons();
   // Se till att den säger "guest" istället för null samt ändrar tillbaka så inloggning är möjligt.
 };
 
