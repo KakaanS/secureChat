@@ -58,20 +58,18 @@ router.get("/getUUID/:id", async (req, res) => {
 });
 
 router.get("/getUser/:username", async (req, res) => {
-  fs.readFile("./db/users.json", "utf8", (err, users) => {
-    if (err) {
-      return res.status(500).send({ message: "Error reading users from file" });
-    }
-
-    const parsedUsers = JSON.parse(users);
-    const user = parsedUsers.find((u) => u.username == req.params.username);
-
+  try {
+    await db_users.read();
+    const user = db_users.data.find((u) => u.username === req.params.username);
     if (!user) {
       return res.status(404).send({ message: "User not found" });
     }
     const ret = { username: user.username, uuid: user.uuid };
     res.send(ret);
-  });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: "Error reading users from file" });
+  }
 });
 
 router.get("/style.css", function (req, res) {
@@ -101,15 +99,11 @@ router.get("/channels", async (req, res) => {
 
 router.post("/verifyToken", async (req, res) => {
   await db_users.read();
-  let token = req.body.nameToken || req.query.nameToken;
+  let token = req.headers.authorization?.split(" ")[1];
   console.log("token", token);
   if (!token) {
-    let x = req.headers["authorization"];
-    if (x === undefined) {
-      res.sendStatus(401);
-      return;
-    }
-    token = x.substring(7);
+    res.sendStatus(401);
+    return;
   }
   let decoded = decode(token);
   if (decoded === false) {
@@ -127,6 +121,7 @@ router.post("/newUser", (req, res) => {
 });
 
 router.post("/login", async (req, res) => {
+  await updateDataFromAllDB();
   const username = req.body.username;
   const password = req.body.password;
   let hashedPassword = bcrypt.hashSync(password, SALT);
@@ -150,11 +145,7 @@ router.post("/login", async (req, res) => {
     return;
   }
   const nameToken = createToken(username);
-  res.cookie("nameToken", nameToken.token, {
-    maxAge: process.env.JWTEXPIRES * 500000,
-    name: username,
-  });
-  res.status(200).send({ success: true });
+  res.status(200).send({ token: nameToken.token });
   console.log(nameToken);
 });
 

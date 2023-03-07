@@ -5,9 +5,7 @@ const fetchChannelsFromServer = async () => {
   const response = await fetch("http://localhost:3000/api/channels");
   const channels = await response.json();
 
-  console.log(channels);
   channels.forEach((channel) => {
-    console.log(channel.status.toLowerCase());
     const isPublic = channel.status.toLowerCase() === "public";
     buildChannelListViaTemplate(
       channel.channelName,
@@ -17,29 +15,37 @@ const fetchChannelsFromServer = async () => {
   });
 };
 
-/* const createChannel = () => {
+const addNewChannelButton = document.querySelector("#addNewChannel");
+
+addNewChannelButton.addEventListener("click", () => {
+  createChannel();
+});
+
+const createChannel = () => {
   const newChannelInput = document.querySelector(".newChannel");
   const privateCheckbox = document.querySelector("#private");
-  const addNewChannelButton = document.querySelector(".addNewChannel");
 
-  addNewChannelButton.addEventListener("click", () => {
-    const channelName = newChannelInput.value;
-    const isPrivate = privateCheckbox.checked;
+  const channelName = newChannelInput.value;
+  let status;
+  if (privateCheckbox.checked === false) {
+    status = "Public";
+  } else {
+    status = "Private";
+  }
 
-    fetch("/api/createChannel", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ channelName, isPrivate }),
+  fetch("/api/createChannel", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ channelName, status }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Channel created successfully", data);
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Channel created successfully", data);
-      })
-      .catch((error) => {
-        console.error("Error creating channel", error);
-      });
-  });
-}; */
+    .catch((error) => {
+      console.error("Error creating channel", error);
+    });
+};
 
 const fetchUserNameFromUuid = async (uuid) => {
   const response = await fetch(`http://localhost:3000/api/getUUID/${uuid}`);
@@ -59,6 +65,14 @@ const fetchChannelMessages = async (channelID) => {
     const username = await fetchUserNameFromUuid(uuid);
     buildMessageChatViaTemplate(message, timestamp, username);
   });
+};
+
+const isLoggedIn = () => {
+  if (currentUser != null) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 const selectChannelHandler = (event) => {
@@ -148,26 +162,33 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-async function verifyToken(loadJWWT) {
-  const jwtObject = {
-    nameToken: loadJWWT,
-  };
-  console.log("jwtObject: ", jwtObject);
+// 1.0 Kolla först om det finns en JWT i localstorage.
+//// 1.1 Om det finns, verifiera den.
+//// 1.2 Uppdatera Loginstatus och vilken användare som är inloggad
+//// 1.3 Lås upp de låsta kanaleran
+//// 1.4 Göra det möjligt att skicka nya medelanden
+//// 1.5 Göra det möjligt att skapa nya kanaler
+
+async function verifyToken() {
+  const token = localStorage.getItem("jwt");
+  console.log("TOKEN", token);
+  if (!token) return;
+  console.log("VERIFY TOKEN");
   const options = {
     method: "POST",
-    body: JSON.stringify(jwtObject),
     headers: {
-      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   };
   const response = await fetch("/api/verifyToken", options);
   if (response.status === 200) {
     const user = await response.json();
+    currentUser = user.username;
     changeTextAndHideInputs(user.username);
   }
 }
 
-function changeTextAndHideInputs(currentUser) {
+async function changeTextAndHideInputs(currentUser) {
   const welcomeText = document.querySelector(".welcomeText");
   console.log(welcomeText);
 
@@ -204,18 +225,22 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(response);
 
     if (response.status === 200) {
-      const nameToken = await response.text();
+      const nameToken = await response.json();
+      localStorage.setItem("jwt", nameToken.token);
+      console.log("i LOGIN", nameToken.token);
       currentUser = username;
-      localStorage.setItem("nameToken", nameToken);
-      changeTextAndHideInputs(username);
+      verifyToken();
     } else if (response.status === 400) {
       console.error("Bad request: missing or incorrect input");
     } else if (response.status === 401) {
       console.error("Unauthorized: incorrect password");
     }
   }
-
   document.querySelector(".signIn").addEventListener("click", login);
+});
+
+document.addEventListener("DOMContentLoaded", async function () {
+  await verifyToken();
 });
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -250,7 +275,7 @@ const buildChannelListViaTemplate = (text, isPublic, channelID) => {
   const channel_name = clone.querySelector(".channelName");
   const channel_status = clone.querySelector(".status");
   const channel_wrap_button = clone.querySelector(".wrapButton");
-  console.log("is it public eller?", isPublic);
+  /* console.log("is it public eller?", isPublic); */
   if (isPublic) {
     channel_status.innerText = "";
   }
@@ -266,7 +291,7 @@ const buildChannelListViaTemplate = (text, isPublic, channelID) => {
 
   channel_wrap_button.addEventListener("click", selectChannelHandler);
   channelContainer.appendChild(clone);
-  console.log("channelwrap: ", channel_wrap_button);
+  /* console.log("channelwrap: ", channel_wrap_button); */
 };
 
 const buildMessageChatViaTemplate = (text, timeStamp, username) => {
@@ -283,24 +308,11 @@ const buildMessageChatViaTemplate = (text, timeStamp, username) => {
   messageContainer.appendChild(clone);
 };
 
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  console.log(value);
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(";").shift();
-}
-const logout = async () => {
-  try {
-    const res = await fetch("http://localhost:3000/api/logout", {
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
-    var content = await res.json();
-    console.log(content);
-  } catch (err) {
-    console.log(err);
-  }
-  location.reload();
+const logout = () => {
+  localStorage.removeItem("jwt");
+  currentUser = null;
+  changeTextAndHideInputs(null);
+  // Se till att den säger "guest" istället för null samt ändrar tillbaka så inloggning är möjligt.
 };
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -308,7 +320,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 window.addEventListener("load", () => {
-  const nameToken = getCookie("nameToken");
-  verifyToken(nameToken);
+  console.log("ON LOAD");
+  /* verifyToken(nameToken); */
   fetchChannelsFromServer();
 });

@@ -123,5 +123,10 @@
     "uuid": 40,
     "username": "12",
     "password": "$2a$10$2R4WmZikKchEsXkGIzP/R.UnohmKZc6CeO.t5M5lWSXIUk31Jax.m"
+  },
+  {
+    "uuid": 42,
+    "username": "",
+    "password": "$2a$10$6t8A9Z4jILgLdf5DrSEjzejIX.Jz8zBQC6741soJj5tJMTmOdd32."
   }
 ]
