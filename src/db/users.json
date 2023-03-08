@@ -8,5 +8,20 @@
     "uuid": 45,
     "username": "1",
     "password": "$2a$10$6t8A9Z4jILgLdf5DrSEjzeMYa2ADj63ly8dwgREg/RiBA0zpLVfrO"
+  },
+  {
+    "uuid": 46,
+    "username": "TestAnvändare",
+    "password": "$2a$10$6t8A9Z4jILgLdf5DrSEjzeMYa2ADj63ly8dwgREg/RiBA0zpLVfrO"
+  },
+  {
+    "uuid": 47,
+    "username": "TestAnvändare3",
+    "password": "$2a$10$6t8A9Z4jILgLdf5DrSEjzejmVSXdKiTcLiW.utiei9P2j/qnO5K4W"
+  },
+  {
+    "uuid": 48,
+    "username": "Användare3",
+    "password": "$2a$10$6t8A9Z4jILgLdf5DrSEjzeMYa2ADj63ly8dwgREg/RiBA0zpLVfrO"
   }
 ]

@@ -9,54 +9,6 @@
         "uuid": 17,
         "message": "Test!",
         "timestamp": "2023-02-03 21:06:31"
-      },
-      {
-        "messageid": 32,
-        "uuid": 17,
-        "message": "asd",
-        "timestamp": "2023-02-03 21:14:30"
-      },
-      {
-        "messageid": 33,
-        "uuid": 17,
-        "message": "t",
-        "timestamp": "2023-02-03 21:23:22"
-      },
-      {
-        "messageid": 34,
-        "uuid": 17,
-        "message": "Få JWT Att hålla sig",
-        "timestamp": "2023-02-03 21:40:54"
-      },
-      {
-        "messageid": 38,
-        "uuid": 35,
-        "message": "Test! ",
-        "timestamp": "2023-02-21 09:43:04"
-      },
-      {
-        "messageid": 39,
-        "uuid": "17",
-        "message": "Hello Simon!",
-        "timestamp": "2023-02-21 10:23:57"
-      },
-      {
-        "messageid": 40,
-        "uuid": "17",
-        "message": "testar på nytt!",
-        "timestamp": "2023-03-04 09:46:56"
-      },
-      {
-        "messageid": 41,
-        "uuid": 17,
-        "message": "Test",
-        "timestamp": "2023-03-04 09:58:01"
-      },
-      {
-        "messageid": 44,
-        "uuid": 17,
-        "message": "Test!",
-        "timestamp": "2023-03-04 10:22:36"
       }
     ]
   },
@@ -72,16 +24,10 @@
         "timestamp": "2023-02-03 21:14:28"
       },
       {
-        "messageid": 45,
-        "uuid": 17,
-        "message": "Test!",
-        "timestamp": "2023-03-04 10:22:41"
-      },
-      {
-        "messageid": 49,
-        "uuid": 21,
-        "message": "test",
-        "timestamp": "2023-03-07 11:37:12"
+        "messageid": 55,
+        "uuid": 45,
+        "message": "Test",
+        "timestamp": "2023-03-08 13:55:03"
       }
     ]
   },
@@ -95,60 +41,19 @@
         "uuid": 17,
         "message": "Test, tömma igen! ",
         "timestamp": "2023-02-03 20:34:51"
-      },
+      }
+    ]
+  },
+  {
+    "channelID": 24,
+    "channelName": "Testkanal1",
+    "status": "public",
+    "chat": [
       {
-        "messageid": 29,
-        "uuid": 17,
-        "message": "!",
-        "timestamp": "2023-02-03 21:08:27"
-      },
-      {
-        "messageid": 30,
-        "uuid": 17,
-        "message": "asd",
-        "timestamp": "2023-02-03 21:14:26"
-      },
-      {
-        "messageid": 35,
-        "uuid": 21,
-        "message": "et",
-        "timestamp": "2023-02-04 13:10:17"
-      },
-      {
-        "messageid": 36,
-        "uuid": 21,
-        "message": "Varför landar inte meddelandena rätt? ",
-        "timestamp": "2023-02-04 13:10:32"
-      },
-      {
-        "messageid": 37,
-        "uuid": 21,
-        "message": "Hej! ",
-        "timestamp": "2023-02-21 08:21:40"
-      },
-      {
-        "messageid": 42,
-        "uuid": 17,
-        "message": "Test",
-        "timestamp": "2023-03-04 09:58:06"
-      },
-      {
-        "messageid": 43,
-        "uuid": 17,
-        "message": "Test!",
-        "timestamp": "2023-03-04 10:10:31"
-      },
-      {
-        "messageid": 46,
-        "uuid": 21,
-        "message": "Test",
-        "timestamp": "2023-03-06 08:54:57"
-      },
-      {
-        "messageid": 47,
-        "uuid": 21,
-        "message": "Test",
-        "timestamp": "2023-03-07 11:01:48"
+        "messageid": 54,
+        "uuid": 48,
+        "message": "Test kanal1",
+        "timestamp": "2023-03-08 10:47:02"
       }
     ]
   }

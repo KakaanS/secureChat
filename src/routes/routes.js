@@ -116,8 +116,13 @@ router.post("/verifyToken", async (req, res) => {
 router.post("/newUser", (req, res) => {
   const username = req.body.name;
   const password = req.body.password;
-  newUser(username, password);
-  res.sendStatus(201);
+
+  if (nameExist(username) !== false) {
+    res.sendStatus(400);
+  } else {
+    newUser(username, password);
+    res.sendStatus(201);
+  }
 });
 
 router.post("/login", async (req, res) => {
@@ -214,7 +219,7 @@ router.put("/editMessage/:id", async (req, res) => {
   let messageToEdit = findMessageByID(messageID);
   if (!messageToEdit) {
     res.sendStatus(404);
-    console.log(messageToEdit, "This is the edited message right????");
+    console.log(messageToEdit, "This is the edited message right?");
     return;
   }
 

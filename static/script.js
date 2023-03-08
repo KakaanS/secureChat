@@ -81,13 +81,28 @@ const isLoggedIn = () => {
   }
 };
 
+const setSelectedChannel = (channelId) => {
+  selectedChannel = channelId;
+  fetchChannelMessages(selectedChannel);
+};
+
+const updateChannelHeader = (channelName) => {
+  const channelHeader = document.querySelector("#right-heading");
+  if (channelName) {
+    channelHeader.innerText = `Channel: ${channelName}`;
+  } else {
+    channelHeader.innerText = " ";
+  }
+};
+
 const selectChannelHandler = (event) => {
   clearMessageContainer();
   const target = event.target;
   const channel_id = target.getAttribute("data-id");
+  const channel_name = target.getAttribute("data-name");
   const channel_status = target.getAttribute("data-status");
   const channelIsPublic = channel_status.toLowerCase() === "true";
-
+  console.log(channel_name);
   const channelWrapperButtons = document.querySelectorAll(".wrapButton");
   channelWrapperButtons.forEach((button) => {
     button.classList.remove("selected");
@@ -95,15 +110,11 @@ const selectChannelHandler = (event) => {
 
   target.classList.add("selected");
 
-  selectedChannel = target.getAttribute("data-id");
   const userIsLoggedIn = currentUser !== null;
-  if (userIsLoggedIn) {
-    fetchChannelMessages(selectedChannel);
-  }
-  if (!userIsLoggedIn && channelIsPublic) {
-    fetchChannelMessages(selectedChannel);
-  }
-  if (!userIsLoggedIn && !channelIsPublic) {
+  if (userIsLoggedIn || channelIsPublic) {
+    setSelectedChannel(channel_id);
+    updateChannelHeader(channel_name);
+  } else {
     console.log("Not allowed to view contents of channel");
   }
 };
@@ -167,13 +178,6 @@ document.addEventListener("DOMContentLoaded", function () {
     postMessage();
   });
 });
-
-// 1.0 Kolla först om det finns en JWT i localstorage.
-//// 1.1 Om det finns, verifiera den.
-//// 1.2 Uppdatera Loginstatus och vilken användare som är inloggad
-//// 1.3 Lås upp de låsta kanaleran
-//// 1.4 Göra det möjligt att skicka nya medelanden
-//// 1.5 Göra det möjligt att skapa nya kanaler
 
 async function verifyToken() {
   const token = localStorage.getItem("jwt");
@@ -275,7 +279,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
       body: JSON.stringify({ name: username, password: password }),
     });
-
+    console.log("respons.status", response.status);
     if (response.status === 201) {
       console.log("New user created successfully!");
     } else if (response.status === 400) {
@@ -304,6 +308,7 @@ const buildChannelListViaTemplate = (text, isPublic, channelID) => {
   channel_wrap_button.setAttribute("data-id", channelID);
   channel_status.setAttribute("data-id", channelID);
   channel_name.setAttribute("data-id", channelID);
+  channel_name.setAttribute("data-name", text);
 
   channel_wrap_button.setAttribute("data-status", isPublic);
   channel_status.setAttribute("data-status", isPublic);
@@ -341,6 +346,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 window.addEventListener("load", () => {
   console.log("ON LOAD");
-  /* verifyToken(nameToken); */
   fetchChannelsFromServer();
 });
