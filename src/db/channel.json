@@ -5,46 +5,26 @@
     "status": "Public",
     "chat": [
       {
-        "messageid": 28,
+        "messageid": 120,
         "uuid": 17,
-        "message": "Test!",
-        "timestamp": "2023-02-03 21:06:31",
+        "message": "Happy hacking",
+        "timestamp": "2023-03-10 16:19:15",
         "deleted": true,
-        "deletedTimestamp": 1678368630814
+        "deletedTimestamp": "2023-03-10 16:19:51"
       },
       {
-        "messageid": 112,
-        "uuid": 45,
-        "message": "Testar! ",
-        "timestamp": "2023-03-10 16:09:13",
-        "editedTimestamp": "2023-03-10 16:13:53",
+        "messageid": 121,
+        "uuid": 17,
+        "message": "Edited hacking",
+        "timestamp": "2023-03-10 16:19:48",
+        "editedTimestamp": "2023-03-10 16:20:00",
         "edited": true
       },
       {
-        "messageid": 113,
-        "uuid": 45,
-        "message": "Orginal",
-        "timestamp": "2023-03-10 16:15:53"
-      },
-      {
-        "messageid": 114,
-        "uuid": 45,
-        "message": "Nej inga frågor",
-        "timestamp": "2023-03-10 16:16:30",
-        "editedTimestamp": "2023-03-10 16:16:36",
-        "edited": true
-      },
-      {
-        "messageid": 115,
-        "uuid": 45,
-        "message": "Frågor på det?",
-        "timestamp": "2023-03-10 16:16:40"
-      },
-      {
-        "messageid": 116,
-        "uuid": 45,
-        "message": "Frågor på det?",
-        "timestamp": "2023-03-10 16:16:40"
+        "messageid": 122,
+        "uuid": 17,
+        "message": "Happy hacking",
+        "timestamp": "2023-03-10 16:19:50"
       }
     ]
   },
@@ -114,6 +94,25 @@
         "timestamp": "2023-03-09 15:24:59",
         "deleted": true,
         "deletedTimestamp": 1678375502821
+      }
+    ]
+  },
+  {
+    "channelID": 25,
+    "channelName": "Happy Hacking",
+    "status": "private",
+    "chat": [
+      {
+        "messageid": 123,
+        "uuid": 45,
+        "message": "Amazing ",
+        "timestamp": "2023-03-10 16:20:35"
+      },
+      {
+        "messageid": 124,
+        "uuid": 49,
+        "message": "Amazing ",
+        "timestamp": "2023-03-10 16:21:31"
       }
     ]
   }

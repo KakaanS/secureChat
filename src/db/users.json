@@ -23,5 +23,10 @@
     "uuid": 48,
     "username": "Användare3",
     "password": "$2a$10$6t8A9Z4jILgLdf5DrSEjzeMYa2ADj63ly8dwgREg/RiBA0zpLVfrO"
+  },
+  {
+    "uuid": 49,
+    "username": "Oscar",
+    "password": "$2a$10$6t8A9Z4jILgLdf5DrSEjzeMYa2ADj63ly8dwgREg/RiBA0zpLVfrO"
   }
 ]
