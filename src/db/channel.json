@@ -8,7 +8,9 @@
         "messageid": 28,
         "uuid": 17,
         "message": "Test!",
-        "timestamp": "2023-02-03 21:06:31"
+        "timestamp": "2023-02-03 21:06:31",
+        "deleted": true,
+        "deletedTimestamp": 1678368630814
       }
     ]
   },
@@ -21,13 +23,25 @@
         "messageid": 31,
         "uuid": 17,
         "message": "asd",
-        "timestamp": "2023-02-03 21:14:28"
+        "timestamp": "2023-02-03 21:14:28",
+        "deleted": true,
+        "deletedTimestamp": 1678364100114
       },
       {
         "messageid": 55,
         "uuid": 45,
         "message": "Test",
-        "timestamp": "2023-03-08 13:55:03"
+        "timestamp": "2023-03-08 13:55:03",
+        "deleted": true,
+        "deletedTimestamp": 1678368828462
+      },
+      {
+        "messageid": 61,
+        "uuid": 45,
+        "message": "Test!",
+        "timestamp": "2023-03-10 06:44:30",
+        "deleted": true,
+        "deletedTimestamp": 1678430671811
       }
     ]
   },
@@ -40,7 +54,9 @@
         "messageid": 25,
         "uuid": 17,
         "message": "Test, tömma igen! ",
-        "timestamp": "2023-02-03 20:34:51"
+        "timestamp": "2023-02-03 20:34:51",
+        "deleted": true,
+        "deletedTimestamp": 1678371282700
       }
     ]
   },
@@ -53,7 +69,17 @@
         "messageid": 54,
         "uuid": 48,
         "message": "Test kanal1",
-        "timestamp": "2023-03-08 10:47:02"
+        "timestamp": "2023-03-08 10:47:02",
+        "deleted": true,
+        "deletedTimestamp": 1678369302885
+      },
+      {
+        "messageid": 60,
+        "uuid": 45,
+        "message": "why? ",
+        "timestamp": "2023-03-09 15:24:59",
+        "deleted": true,
+        "deletedTimestamp": 1678375502821
       }
     ]
   }

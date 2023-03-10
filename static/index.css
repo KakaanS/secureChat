@@ -150,3 +150,6 @@ button {
 .logout {
   display: none;
 }
+.deleteMsgBtn {
+  size: 10px;
+}

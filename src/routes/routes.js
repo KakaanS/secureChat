@@ -89,8 +89,37 @@ router.get("/messages/:id", async (req, res) => {
     return;
     console.log(channel);
   }
-  res.send(channel.chat);
+
+  const updatedChat = channel.chat.map((message) => {
+    if (message.deleted) {
+      return {
+        ...message,
+        message: "Message deleted",
+        timestamp: message.deletedTimestamp,
+      };
+    } else {
+      return message;
+    }
+  });
+
+  res.send(updatedChat);
 });
+
+/* router.get("/messages/:id", async (req, res) => {
+  await updateDataFromAllDB();
+  const channelId = req.params.id;
+  console.log(channelId);
+  const channel = db_channel.data.find(
+    (channel) => channel.channelID === Number(channelId)
+  );
+  console.log(channel);
+  if (!channel) {
+    res.sendStatus(404);
+    return;
+    console.log(channel);
+  }
+  res.send(channel.chat);
+}); */
 
 router.get("/channels", async (req, res) => {
   await updateDataFromAllDB();
@@ -223,8 +252,10 @@ router.put("/editMessage/:id", async (req, res) => {
     return;
   }
 
+  const editedTimestamp = generateDate(); // current time when message is edited
   messageToEdit.message = newMessage;
   messageToEdit.timestamp = newTimestamp;
+  messageToEdit.editedTimestamp = editedTimestamp; // add editedTimestamp to message object
   await db_channel.write();
   res.sendStatus(200);
 });
@@ -240,7 +271,7 @@ router.delete("/deleteMessage/:id", async (req, res) => {
     return;
   }
   messageToDelete.deleted = true;
-  messageToDelete.deletedTimestamp = Date.now();
+  messageToDelete.deletedTimestamp = generateDate();
   await db_channel.write();
   res.sendStatus(200);
 });

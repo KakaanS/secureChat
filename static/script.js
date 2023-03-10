@@ -1,5 +1,6 @@
 let currentUser = null;
 let selectedChannel = null;
+let currentUserId = null;
 
 const fetchChannelsFromServer = async () => {
   const response = await fetch("http://localhost:3000/api/channels");
@@ -60,17 +61,51 @@ const fetchUserNameFromUuid = async (uuid) => {
 };
 
 const fetchChannelMessages = async (channelID) => {
-  const response = await fetch(
-    `http://localhost:3000/api/messages/${channelID}`
-  );
+  let response = null;
+  try {
+    response = await fetch(`http://localhost:3000/api/messages/${channelID}`);
+  } catch {
+    console.log(response);
+  }
   const channelMessages = await response.json();
 
   const messages = channelMessages;
   messages.forEach(async (item) => {
-    const { message, timestamp, uuid } = item;
+    const { message, timestamp, uuid, messageid, deleted } = item;
     const username = await fetchUserNameFromUuid(uuid);
-    buildMessageChatViaTemplate(message, timestamp, username);
+    buildMessageChatViaTemplate(message, timestamp, uuid, username, messageid);
+    console.log("msgID", messageid);
   });
+};
+
+const deleteMessageHandler = async (event) => {
+  const messageId = event.target.getAttribute("data-id");
+  const messageAuthor = event.target.getAttribute("data-author");
+  const token = localStorage.getItem("token");
+  const messageUuid = Number.parseInt(messageAuthor);
+  console.log(typeof currentUserId, typeof messageUuid);
+  console.log(currentUserId, messageUuid);
+
+  if (currentUserId !== messageUuid) {
+    console.log("You do not have permission to delete this message");
+    return;
+  }
+  const response = await fetch(`/api/deleteMessage/${messageId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  });
+  console.log(response);
+  if (response.status === 200) {
+    console.log(selectedChannel);
+    console.log(typeof selectedChannel);
+    clearMessageContainer();
+    await fetchChannelMessages(selectedChannel);
+  } else {
+    console.log("Failed to delete message");
+  }
 };
 
 const isLoggedIn = () => {
@@ -124,15 +159,15 @@ const clearMessageContainer = () => {
   message_container.innerHTML = "";
 };
 
-async function getUserUUID(username) {
+const getUserUUID = async (username) => {
   const response = await fetch(`/api/getUser/${username}`);
-  if (!response.ok) {
+  if (!response.status === 200) {
     console.error("Error: Could not fetch user data");
     return;
   }
   const user = await response.json();
   return user.uuid;
-}
+};
 
 const postMessage = async () => {
   if (!currentUser) {
@@ -190,10 +225,18 @@ async function verifyToken() {
       Authorization: `Bearer ${token}`,
     },
   };
+  console.log("verify token");
   const response = await fetch("/api/verifyToken", options);
   if (response.status === 200) {
+    console.log("verify token 200");
+
     const user = await response.json();
+
+    const uuid = await getUserUUID(user.username);
+
+    console.log(user);
     currentUser = user.username;
+    currentUserId = uuid;
     changeTextAndHideInputs(user.username);
   }
 }
@@ -318,19 +361,72 @@ const buildChannelListViaTemplate = (text, isPublic, channelID) => {
   channelContainer.appendChild(clone);
 };
 
-const buildMessageChatViaTemplate = (text, timeStamp, username) => {
+const buildMessageChatViaTemplate = (
+  text,
+  timeStamp,
+  uuid,
+  username,
+  messageId,
+  editedTimestamp
+) => {
   const messageContainer = document.querySelector(".messageContainer");
   const template = document.querySelector("#messageTemplate");
   const clone = template.content.cloneNode(true);
   const message_text = clone.querySelector(".message");
   const username_text = clone.querySelector(".username");
   const message_timestamp = clone.querySelector(".timeStamp");
+  const deleteButton = clone.querySelector(".deleteMsgBtn");
+
+  message_text.innerText = ": " + text;
+  username_text.innerText = username;
+
+  if (editedTimestamp) {
+    message_timestamp.innerText = `Edited ${new Date(
+      editedTimestamp
+    ).toLocaleString()}`;
+  } else {
+    message_timestamp.innerText = timeStamp;
+  }
+
+  deleteButton.setAttribute("data-author", uuid);
+  if (messageId) {
+    deleteButton.setAttribute("data-id", messageId);
+    deleteButton.addEventListener("click", deleteMessageHandler);
+  } else {
+    deleteButton.style.display = "none";
+  }
+
+  messageContainer.appendChild(clone);
+};
+
+/* const buildMessageChatViaTemplate = (
+  text,
+  timeStamp,
+  username,
+  messageId,
+  deleted
+) => {
+  const messageContainer = document.querySelector(".messageContainer");
+  const template = document.querySelector("#messageTemplate");
+  const clone = template.content.cloneNode(true);
+  const message_text = clone.querySelector(".message");
+  const username_text = clone.querySelector(".username");
+  const message_timestamp = clone.querySelector(".timeStamp");
+  const deleteButton = clone.querySelector(".deleteMsgBtn");
 
   message_text.innerText = ": " + text;
   username_text.innerText = username;
   message_timestamp.innerText = timeStamp;
+
+  if (messageId) {
+    deleteButton.setAttribute("data-id", messageId);
+    deleteButton.addEventListener("click", deleteMessageHandler);
+  }
+  if (deleted) {
+    message_text.innerText = "Message deleted";
+  }
   messageContainer.appendChild(clone);
-};
+}; */
 
 const logout = () => {
   localStorage.removeItem("jwt");
@@ -346,5 +442,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 window.addEventListener("load", () => {
   console.log("ON LOAD");
+
   fetchChannelsFromServer();
 });
