@@ -105,22 +105,6 @@ router.get("/messages/:id", async (req, res) => {
   res.send(updatedChat);
 });
 
-/* router.get("/messages/:id", async (req, res) => {
-  await updateDataFromAllDB();
-  const channelId = req.params.id;
-  console.log(channelId);
-  const channel = db_channel.data.find(
-    (channel) => channel.channelID === Number(channelId)
-  );
-  console.log(channel);
-  if (!channel) {
-    res.sendStatus(404);
-    return;
-    console.log(channel);
-  }
-  res.send(channel.chat);
-}); */
-
 router.get("/channels", async (req, res) => {
   await updateDataFromAllDB();
   res.send(db_channel.data);
@@ -159,7 +143,6 @@ router.post("/login", async (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   let hashedPassword = bcrypt.hashSync(password, SALT);
-  console.log(username, password, nameExist(username));
   if (
     username === (undefined || "") ||
     password === (undefined || "") ||
@@ -169,9 +152,9 @@ router.post("/login", async (req, res) => {
     return;
   }
   const nameIndex = nameExist(username);
-  console.log("nameindex:", nameIndex);
+  /*  console.log("nameindex:", nameIndex);
   console.log("Lösenord i DB", db_users.data[nameIndex].password);
-  console.log("Lösenord  skickat", hashedPassword);
+  console.log("Lösenord  skickat", hashedPassword); */
 
   if (db_users.data[nameIndex].password !== hashedPassword) {
     console.log("Wrong password");
@@ -239,11 +222,9 @@ router.put("/editMessage/:id", async (req, res) => {
   await updateDataFromAllDB();
   const messageID = req.params.id;
   const newMessage = req.body.message;
-  const newTimestamp = req.body.timestamp;
 
   console.log(messageID);
   console.log(newMessage);
-  console.log(newTimestamp);
 
   let messageToEdit = findMessageByID(messageID);
   if (!messageToEdit) {
@@ -252,10 +233,10 @@ router.put("/editMessage/:id", async (req, res) => {
     return;
   }
 
-  const editedTimestamp = generateDate(); // current time when message is edited
+  const editedTimestamp = generateDate();
   messageToEdit.message = newMessage;
-  messageToEdit.timestamp = newTimestamp;
-  messageToEdit.editedTimestamp = editedTimestamp; // add editedTimestamp to message object
+  messageToEdit.editedTimestamp = editedTimestamp;
+  messageToEdit.edited = true;
   await db_channel.write();
   res.sendStatus(200);
 });

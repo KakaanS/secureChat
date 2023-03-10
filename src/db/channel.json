@@ -11,6 +11,40 @@
         "timestamp": "2023-02-03 21:06:31",
         "deleted": true,
         "deletedTimestamp": 1678368630814
+      },
+      {
+        "messageid": 112,
+        "uuid": 45,
+        "message": "Testar! ",
+        "timestamp": "2023-03-10 16:09:13",
+        "editedTimestamp": "2023-03-10 16:13:53",
+        "edited": true
+      },
+      {
+        "messageid": 113,
+        "uuid": 45,
+        "message": "Orginal",
+        "timestamp": "2023-03-10 16:15:53"
+      },
+      {
+        "messageid": 114,
+        "uuid": 45,
+        "message": "Nej inga frågor",
+        "timestamp": "2023-03-10 16:16:30",
+        "editedTimestamp": "2023-03-10 16:16:36",
+        "edited": true
+      },
+      {
+        "messageid": 115,
+        "uuid": 45,
+        "message": "Frågor på det?",
+        "timestamp": "2023-03-10 16:16:40"
+      },
+      {
+        "messageid": 116,
+        "uuid": 45,
+        "message": "Frågor på det?",
+        "timestamp": "2023-03-10 16:16:40"
       }
     ]
   },

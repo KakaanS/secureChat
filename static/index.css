@@ -153,3 +153,9 @@ button {
 .deleteMsgBtn {
   size: 10px;
 }
+.editInput {
+  display: none;
+}
+.isEditedCss {
+  display: none;
+}

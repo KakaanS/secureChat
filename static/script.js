@@ -71,9 +71,17 @@ const fetchChannelMessages = async (channelID) => {
 
   const messages = channelMessages;
   messages.forEach(async (item) => {
-    const { message, timestamp, uuid, messageid, deleted } = item;
+    const { message, timestamp, uuid, messageid, deleted, editedTimestamp } =
+      item;
     const username = await fetchUserNameFromUuid(uuid);
-    buildMessageChatViaTemplate(message, timestamp, uuid, username, messageid);
+    buildMessageChatViaTemplate(
+      message,
+      timestamp,
+      uuid,
+      username,
+      messageid,
+      editedTimestamp
+    );
     console.log("msgID", messageid);
   });
 };
@@ -105,6 +113,50 @@ const deleteMessageHandler = async (event) => {
     await fetchChannelMessages(selectedChannel);
   } else {
     console.log("Failed to delete message");
+  }
+};
+
+const editMessageHandler = async (event) => {
+  const messageId = event.target.getAttribute("data-id");
+  const messageAuthor = event.target.getAttribute("data-author");
+  const editInput =
+    event.currentTarget.parentNode.parentNode.querySelector(".editInput");
+  const token = localStorage.getItem("token");
+  const messageUuid = Number.parseInt(messageAuthor);
+  console.log(typeof currentUserId, typeof messageUuid);
+  console.log(currentUserId, messageUuid);
+
+  if (currentUserId !== messageUuid) {
+    console.log("You do not have permission to edit this message");
+    return;
+  }
+
+  if (event.target.innerText == "Save") {
+    //spara ner meddelandet
+    const payload = {
+      message: editInput.value,
+    };
+
+    const response = await fetch(`/api/editMessage/${messageId}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log(response);
+
+    if (response.status === 200) {
+      clearMessageContainer();
+      await fetchChannelMessages(selectedChannel);
+    } else {
+      console.log("Failed to delete message");
+    }
+  } else {
+    editInput.style.display = "block";
+    event.target.innerText = "Save";
   }
 };
 
@@ -376,22 +428,27 @@ const buildMessageChatViaTemplate = (
   const username_text = clone.querySelector(".username");
   const message_timestamp = clone.querySelector(".timeStamp");
   const deleteButton = clone.querySelector(".deleteMsgBtn");
+  const editButton = clone.querySelector(".editMsgBtn");
+  const editBox = clone.querySelector(".isEditedCss");
+  const editText = clone.querySelector(".editedTimestamp");
 
   message_text.innerText = ": " + text;
   username_text.innerText = username;
-
+  console.log(editedTimestamp);
   if (editedTimestamp) {
-    message_timestamp.innerText = `Edited ${new Date(
-      editedTimestamp
-    ).toLocaleString()}`;
-  } else {
-    message_timestamp.innerText = timeStamp;
+    editBox.style.display = "block";
+
+    editText.innerText = `${new Date(editedTimestamp).toLocaleString()}`;
   }
+  message_timestamp.innerText = timeStamp;
 
   deleteButton.setAttribute("data-author", uuid);
+  editButton.setAttribute("data-author", uuid);
   if (messageId) {
     deleteButton.setAttribute("data-id", messageId);
+    editButton.setAttribute("data-id", messageId);
     deleteButton.addEventListener("click", deleteMessageHandler);
+    editButton.addEventListener("click", editMessageHandler);
   } else {
     deleteButton.style.display = "none";
   }
